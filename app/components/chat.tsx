@@ -629,7 +629,7 @@ function _Chat() {
         console.error('Attempted to remove a file without an id');
         return;
       }
-      setFiles(prevFiles => prevFiles.filter(file => file.id !== fileId));
+      setPromptFiles(prevFiles => prevFiles.filter(file => file.id !== fileId));
       setFilesWithBase64(prevFilesWithBase64 => prevFilesWithBase64.filter(fwb64 => fwb64.file.id !== fileId));
     };
     
