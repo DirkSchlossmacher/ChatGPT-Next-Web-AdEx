@@ -68,6 +68,7 @@ export type ChatMessage = RequestMessage & {
   // ... any other properties
 }
 
+/*
 export function createMessage(override: Partial<ChatMessage>): ChatMessage {
   return {
     id: nanoid(),
@@ -77,8 +78,18 @@ export function createMessage(override: Partial<ChatMessage>): ChatMessage {
     ...override,
   };
 }
+*/
 
-
+// Modify the createMessage function to accept a ChatMessageContent type for content
+export function createMessage(override: Partial<ChatMessage> & { content?: ChatMessageContent }): ChatMessage {
+  return {
+    id: nanoid(),
+    date: new Date().toLocaleString(),
+    role: "user",
+    content: "", // default as an empty string, can be overridden
+    ...override,
+  };
+}
 
 export interface ChatStat {
   tokenCount: number;
@@ -412,9 +423,10 @@ export const useChatStore = createPersistStore(
             text: userContent,
           };
           
-          userMessage = createMessage({
+          const userMessage = createMessage({
             role: "user",
-            content: [contentJson, ...userFilesArray] as ContentObject[],
+            // The content property is directly assignable to ContentObject[] without type assertion
+            content: [contentJson, ...userFilesArray]
           });
           console.log("[userMessage] with files: ", userMessage);
 
