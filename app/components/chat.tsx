@@ -672,7 +672,7 @@ function _Chat() {
         maxFiles={2} 
         accept="image/*">
         
-        {files.map((file: ExtFile) => (
+        {promptFiles.map((file: ExtFile) => (
             <FileMosaic key={file.id} {...file} onDelete={removeFile} info={true} preview />
         ))}
       </Dropzone>
