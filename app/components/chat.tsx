@@ -659,7 +659,7 @@ function _Chat() {
         }
       });
     
-      setFiles(files);
+      setPromptFiles(files);
     };
     
 
