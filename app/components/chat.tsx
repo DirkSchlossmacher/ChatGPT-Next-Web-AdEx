@@ -635,11 +635,10 @@ function _Chat() {
     };
     
     const updateFiles = (promptFiles: ExtFile[]) => {
-      console.log('incomingFiles2:', files);
-      console.log('promptFiles:', promptFiles);
+      console.log('incomingFiles2:', promptFiles);
 
       
-      files.forEach(extFile => {
+      promptFiles.forEach(extFile => {
         if (extFile.file) { // Guard clause to ensure file is defined
           const reader = new FileReader();
           reader.onload = (e) => {
@@ -660,7 +659,7 @@ function _Chat() {
         }
       });
     
-      setPromptFiles(files);
+      setPromptFiles(promptFiles);
     };
     
 
