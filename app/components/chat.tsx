@@ -591,7 +591,7 @@ export function EditMessageModal(props: { onClose: () => void }) {
           </ListItem>
         </List>
         <ContextPrompts
-          context={messages}
+          context={messages as import("../store/chat").ChatMessage[]}
           updateContext={(updater) => {
             const newMessages = messages.slice();
             updater(newMessages);
