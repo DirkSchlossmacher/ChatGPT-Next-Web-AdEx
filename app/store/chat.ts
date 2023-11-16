@@ -308,6 +308,7 @@ export const useChatStore = createPersistStore(
         console.log("[User Input] after template: ", userContent);
 
         let userMessage: ChatMessage;
+        let userMessage2: ChatMessage;
 
         // Create a FormData object if there are files to upload
         if (files.length > 0) {
@@ -383,7 +384,9 @@ export const useChatStore = createPersistStore(
           ];
 
           const userMessageContent2 = JSON.stringify([contentJson, ...userFilesArray]);
-          console.log("userMessageContent JSON String:", userMessageContent2);
+
+          console.log("userMessageContent:", userMessageContent);
+          console.log("userMessageContent2 JSON String:", userMessageContent2);
 
           userMessage2 = createMessage({
             role: "user",
