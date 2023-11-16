@@ -80,14 +80,18 @@ export function createMessage(override: Partial<ChatMessage>): ChatMessage {
 }
 */
 
-// Modify the createMessage function to accept a ChatMessageContent type for content
-export function createMessage(override: Partial<ChatMessage> & { content?: ChatMessageContent }): ChatMessage {
+// Adjust the createMessage function
+export function createMessage({
+  content,
+  ...override
+}: { content: ChatMessageContent } & Omit<Partial<ChatMessage>, 'content'>): ChatMessage {
   return {
     id: nanoid(),
     date: new Date().toLocaleString(),
     role: "user",
-    content: "", // default as an empty string, can be overridden
+    content: "", // The default is an empty string but will be overwritten by the content argument
     ...override,
+    content, // Explicitly set content here, overwriting the default if provided
   };
 }
 
