@@ -64,7 +64,7 @@ interface NewChatMessage {
   content?: ChatMessageContent;
 }
 
-type ChatMessage = RequestMessage & NewChatMessage & {
+export type ChatMessage = RequestMessage & NewChatMessage & {
   streaming?: boolean;
   isError?: boolean;
   model?: ModelType;
