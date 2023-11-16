@@ -376,8 +376,21 @@ export const useChatStore = createPersistStore(
             }
           ];
 
-          const userMessageContent = JSON.stringify([contentJson, ...userFilesArray]);
 
+          const userMessageContent = [
+            contentJson, 
+            ...userFilesArray
+          ];
+
+          const userMessageContent2 = JSON.stringify([contentJson, ...userFilesArray]);
+          console.log("userMessageContent JSON String:", userMessageContent2);
+
+          userMessage = createMessage2({
+            role: "user",
+            content: userMessageContent2
+          });
+          console.log("[userMessage2] with files: ", userMessage2);
+          
           userMessage = createMessage({
             role: "user",
             content: userMessageContent
