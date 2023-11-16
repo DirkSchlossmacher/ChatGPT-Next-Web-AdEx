@@ -60,7 +60,7 @@ type ContentObject = {
 interface ChatMessage {
   id: string;
   date: string;
-  role: 'user' | 'function' | 'tool' | 'system'; // Assuming 'role' can be either 'user' or 'system'
+  role: 'user' | 'function' | 'tool' | 'system' | 'assistant'; // Assuming 'role' can be either 'user' or 'system'
   content: ChatMessageContent;
 }
 
