@@ -13,7 +13,7 @@ import {
   StoreKey,
   SUMMARIZE_MODEL,
 } from "../constant";
-import { api, RequestMessage } from "../client/api";
+import { api, RequestMessage, MessageRole } from "../client/api";
 import { ChatControllerPool } from "../client/controller";
 import { prettyObject } from "../utils/format";
 import { estimateTokenLength } from "../utils/token";
@@ -56,21 +56,19 @@ type ContentObject = {
   };
 };
 
+type ChatMessageContent = string | ContentObject[];
 
 interface ChatMessage {
   id: string;
   date: string;
-  role: ROLES; // Assuming 'role' can be either 'user' or 'system'
-  content: ChatMessageContent;
 }
 
-type ChatMessageContent = string | ContentObject[];
 
 export type ChatMessage = RequestMessage & {
   id: string;
   date: string;
-  role: string;
-  content: ChatMessageContent;
+  role?: MessageRole;
+  content?: ChatMessageContent;
   streaming?: boolean;
   isError?: boolean;
   model?: ModelType;
