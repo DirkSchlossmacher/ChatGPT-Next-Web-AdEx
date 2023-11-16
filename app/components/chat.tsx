@@ -611,7 +611,7 @@ function _Chat() {
     base64: string | ArrayBuffer | null;
   }
 
-  const [files, setFiles] = useState<ExtFile[]>([]);
+  const [promptFiles, setPromptFiles] = useState<ExtFile[]>([]);
   const [filesWithBase64, setFilesWithBase64] = useState<FileWithBase64[]>([]);
   const handleUserInput = async (userInput: string) => {
     // When the user submits the input, call onUserInput with the userInput and files
@@ -635,7 +635,9 @@ function _Chat() {
     
     const updateFiles = (files: ExtFile[]) => {
       console.log('incomingFiles2:', files);
+      console.log('promptFiles:', promptFiles);
 
+      
       files.forEach(extFile => {
         if (extFile.file) { // Guard clause to ensure file is defined
           const reader = new FileReader();
@@ -664,7 +666,7 @@ function _Chat() {
     return (
       <Dropzone
         onChange={updateFiles}
-        value={files}
+        value={promptFiles}
         style={{ width: "100px", height: "50px" }}
         label={"📷"}
         maxFiles={2} 
