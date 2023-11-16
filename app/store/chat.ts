@@ -57,7 +57,7 @@ type ContentObject = {
 
 type ChatMessageContent = string | ContentObject[];
 
-interface ChatMessage {
+export type ChatMessage {
   id: string;
   date: string;
   role: string;
