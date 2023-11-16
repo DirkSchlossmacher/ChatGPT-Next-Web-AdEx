@@ -57,11 +57,14 @@ type ContentObject = {
 
 type ChatMessageContent = string | ContentObject[];
 
-export type ChatMessage {
+export type ChatMessage = RequestMessage & {
   id: string;
   date: string;
   role: string;
   content: ChatMessageContent;
+  streaming?: boolean;
+  isError?: boolean;
+  model?: ModelType;
   // ... any other properties
 }
 
@@ -74,6 +77,8 @@ export function createMessage(override: Partial<ChatMessage>): ChatMessage {
     ...override,
   };
 }
+
+
 
 export interface ChatStat {
   tokenCount: number;
