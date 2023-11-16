@@ -618,6 +618,7 @@ function _Chat() {
     await chatStore.onUserInput(userInput, filesWithBase64);
     // Optionally clear the files after submitting
     setFilesWithBase64([]);
+    setPromptFiles([]);
   };
 
   function DropFiles() {
@@ -633,7 +634,7 @@ function _Chat() {
       setFilesWithBase64(prevFilesWithBase64 => prevFilesWithBase64.filter(fwb64 => fwb64.file.id !== fileId));
     };
     
-    const updateFiles = (files: ExtFile[]) => {
+    const updateFiles = (promptFiles: ExtFile[]) => {
       console.log('incomingFiles2:', files);
       console.log('promptFiles:', promptFiles);
 
