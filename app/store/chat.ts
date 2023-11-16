@@ -78,7 +78,7 @@ export function createMessage(
     id: nanoid(),
     date: new Date().toISOString(),
     role: 'user', // Default value, can be overridden
-    content: override.content, // Directly use the content from override
+    content: override.content as ChatMessageContent, // Type assertion
     ...override,
   };
 }
