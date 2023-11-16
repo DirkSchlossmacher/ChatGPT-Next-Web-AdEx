@@ -71,15 +71,15 @@ export type ChatMessage = RequestMessage & NewChatMessage & {
   // ... any other properties specific to ChatMessage
 };
 
-export function createMessage<T extends ChatMessageContent>(
-  override: Omit<Partial<ChatMessage>, 'content'> & { content: T }
+export function createMessage(
+  override: Omit<Partial<ChatMessage>, 'content'> & { content: ChatMessageContent }
 ): ChatMessage {
   return {
     id: nanoid(),
-    date: new Date().toISOString(), // Changed to ISO string for consistency
+    date: new Date().toISOString(),
     role: 'user', // Default value, can be overridden
     content: override.content, // Directly use the content from override
-    ...override, // Spread the rest of the override properties
+    ...override,
   };
 }
 
