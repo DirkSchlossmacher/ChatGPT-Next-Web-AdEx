@@ -47,13 +47,22 @@ export function createMessage(override: Partial<ChatMessage>): ChatMessage {
 }
 */
 
+
 type ContentObject = {
-  type: string;
+  type: 'text' | 'image_url';
   text?: string;
   image_url?: {
     url: string;
   };
 };
+
+
+interface ChatMessage {
+  id: string;
+  date: string;
+  role: 'user' | 'function' | 'tool' | 'system'; // Assuming 'role' can be either 'user' or 'system'
+  content: ChatMessageContent;
+}
 
 type ChatMessageContent = string | ContentObject[];
 
@@ -81,17 +90,13 @@ export function createMessage(override: Partial<ChatMessage>): ChatMessage {
 */
 
 // Adjust the createMessage function
-export function createMessage({
-  content,
-  ...override
-}: { content: ChatMessageContent } & Omit<Partial<ChatMessage>, 'content'>): ChatMessage {
+export function createMessage<T extends ChatMessageContent>(override: Omit<Partial<ChatMessage>, 'content'> & { content: T }): ChatMessage {
   return {
     id: nanoid(),
     date: new Date().toLocaleString(),
-    role: "user",
-    content: "", // The default is an empty string but will be overwritten by the content argument
+    role: 'user', // Default value, can be overridden
+    content: '' as any, // We will override this with the actual content
     ...override,
-    content, // Explicitly set content here, overwriting the default if provided
   };
 }
 
