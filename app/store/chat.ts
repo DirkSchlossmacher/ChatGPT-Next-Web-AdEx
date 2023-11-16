@@ -47,7 +47,6 @@ export function createMessage(override: Partial<ChatMessage>): ChatMessage {
 }
 */
 
-
 type ContentObject = {
   type: 'text' | 'image_url';
   text?: string;
@@ -58,45 +57,32 @@ type ContentObject = {
 
 type ChatMessageContent = string | ContentObject[];
 
-interface ChatMessage {
+interface NewChatMessage {
   id: string;
   date: string;
+  role?: MessageRole; // Assuming MessageRole is defined elsewhere
+  content?: ChatMessageContent;
 }
 
-
-export type ChatMessage = RequestMessage & {
-  id: string;
-  date: string;
-  role?: MessageRole;
-  content?: ChatMessageContent;
+type ChatMessage = RequestMessage & NewChatMessage & {
   streaming?: boolean;
   isError?: boolean;
   model?: ModelType;
-  // ... any other properties
-}
+  // ... any other properties specific to ChatMessage
+};
 
-/*
-export function createMessage(override: Partial<ChatMessage>): ChatMessage {
+export function createMessage<T extends ChatMessageContent>(
+  override: Omit<Partial<ChatMessage>, 'content'> & { content: T }
+): ChatMessage {
   return {
     id: nanoid(),
-    date: new Date().toLocaleString(),
-    role: "user",
-    content: "", // default as an empty string, can be overridden
-    ...override,
-  };
-}
-*/
-
-// Adjust the createMessage function
-export function createMessage<T extends ChatMessageContent>(override: Omit<Partial<ChatMessage>, 'content'> & { content: T }): ChatMessage {
-  return {
-    id: nanoid(),
-    date: new Date().toLocaleString(),
+    date: new Date().toISOString(), // Changed to ISO string for consistency
     role: 'user', // Default value, can be overridden
-    content: '' as any, // We will override this with the actual content
-    ...override,
+    content: override.content, // Directly use the content from override
+    ...override, // Spread the rest of the override properties
   };
 }
+
 
 export interface ChatStat {
   tokenCount: number;
