@@ -407,10 +407,10 @@ export const useChatStore = createPersistStore(
           // You will need to modify the backend API endpoint to accept and process FormData
 
 
-          const contentJson: ContentObject {
+          const contentJson: ContentObject = {
             type: "text",
-            content: userContent,
-          }
+            text: userContent,
+          };
           
           userMessage = createMessage({
             role: "user",
