@@ -72,7 +72,7 @@ export type ChatMessage = RequestMessage & NewChatMessage & {
 };
 
 export function createMessage(
-  override: Omit<Partial<ChatMessage>, 'content'> & { content: ChatMessageContent }
+  override: Omit<Partial<NewChatMessage>, 'content'> & { content: ChatMessageContent }
 ): ChatMessage {
   return {
     id: nanoid(),
