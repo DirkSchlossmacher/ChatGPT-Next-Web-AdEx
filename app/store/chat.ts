@@ -27,7 +27,7 @@ interface FileWithBase64 {
   base64: string | ArrayBuffer | null;
 }
 
-
+/*
 export type ChatMessage = RequestMessage & {
   date: string;
   streaming?: boolean;
@@ -42,6 +42,35 @@ export function createMessage(override: Partial<ChatMessage>): ChatMessage {
     date: new Date().toLocaleString(),
     role: "user",
     content: "",
+    ...override,
+  };
+}
+*/
+
+type ContentObject = {
+  type: string;
+  text?: string;
+  image_url?: {
+    url: string;
+  };
+};
+
+type ChatMessageContent = string | ContentObject[];
+
+interface ChatMessage {
+  id: string;
+  date: string;
+  role: string;
+  content: ChatMessageContent;
+  // ... any other properties
+}
+
+export function createMessage(override: Partial<ChatMessage>): ChatMessage {
+  return {
+    id: nanoid(),
+    date: new Date().toLocaleString(),
+    role: "user",
+    content: "", // default as an empty string, can be overridden
     ...override,
   };
 }
@@ -336,6 +365,8 @@ export const useChatStore = createPersistStore(
         ],
       },
 */
+
+/*
           
           interface FileWithImageUrl {
             type: string;
@@ -343,9 +374,9 @@ export const useChatStore = createPersistStore(
               url: string;
             };
           }
-          
+*/          
           // Now declare userFilesArray with the type FileWithImageUrl[]
-          let userFilesArray: FileWithImageUrl[] = [];
+          let userFilesArray: ContentObject [] = [];
 
           files.forEach((fileWithBase64) => {
             if (typeof fileWithBase64.base64 === 'string') {
@@ -370,33 +401,10 @@ export const useChatStore = createPersistStore(
           // TODO: Send formData to the backend instead of just userContent
           // You will need to modify the backend API endpoint to accept and process FormData
 
-          const contentJson = [
-            {
-              type: "text", 
-              text: userContent
-            }
-          ];
 
-
-          const userMessageContent = [
-            contentJson, 
-            ...userFilesArray
-          ];
-
-          const userMessageContent2 = JSON.stringify([contentJson, ...userFilesArray]);
-
-          console.log("userMessageContent:", userMessageContent);
-          console.log("userMessageContent2 JSON String:", userMessageContent2);
-
-          userMessage2 = createMessage({
-            role: "user",
-            content: userMessageContent2
-          });
-          console.log("[userMessage2] with files: ", userMessage2);
-          
           userMessage = createMessage({
             role: "user",
-            content: userMessageContent
+            content: [contentJson, ...userFilesArray]
           });
           console.log("[userMessage] with files: ", userMessage);
 
