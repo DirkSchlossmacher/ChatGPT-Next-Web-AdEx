@@ -30,7 +30,7 @@ import { useAppConfig } from "../store/config";
 import { AuthPage } from "./auth";
 //Dirk Schlossmacher: duplicate:: import { getClientConfig } from "../config/client";
 import { ClientApi } from "../client/api";
-import { useAccessStore } from "../store";
+//Dirk Schlossmacher: duplicate:: import { useAccessStore } from "../store";
 import { SideBar } from "./sidebar";
 
 export function Loading(props: { noLogo?: boolean }) {
