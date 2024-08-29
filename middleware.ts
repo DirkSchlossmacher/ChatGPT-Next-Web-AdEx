@@ -1,9 +1,9 @@
+import { withAuth } from 'next-auth/middleware';
 import { NextRequest } from 'next/server';
-import { default as authMiddleware } from 'next-auth/middleware';
 
 export default function middleware(req: NextRequest) {
   console.log(`Request URL: ${req.url}`);
-  return authMiddleware(req);
+  return withAuth(req);
 }
 
 export const config = {
