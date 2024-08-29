@@ -1,7 +1,8 @@
 if (window.location.hostname === "adexgpt.adexpartners.com") {
     var currentPath = window.location.pathname + window.location.search + window.location.hash;
     var newUrl = "https://adexgpt.vercel.app" + currentPath;
-        window.location.href = newUrl;
+        //redirect to vercel-domain
+        //window.location.href = newUrl;
 }
 
 /*
