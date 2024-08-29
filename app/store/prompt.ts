@@ -182,10 +182,11 @@ export const usePromptStore = createPersistStore(
           SearchService.init(allPromptsForSearch, userPrompts);
         });
       /* */
+      // SearchService.init([], []);
+
 
       // You may want to add some temporary code to initialize your prompts if needed
       // For example, you can initialize SearchService with empty arrays or default data
-      SearchService.init([], []);
 
     },
   },
