@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
-import authMiddleware from 'next-auth/middleware';
+import { default as authMiddleware } from 'next-auth/middleware';
 
-export function middleware(req: NextRequest) {
+export default function middleware(req: NextRequest) {
   console.log(`Request URL: ${req.url}`);
   return authMiddleware(req);
 }
