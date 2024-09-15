@@ -13,16 +13,16 @@ import { withAuth } from "next-auth/middleware";
 
 export default withAuth({
   callbacks: {
-    authorized: (req) => {
-      // Allow requests where a session exists
-      return !!req.nextauth.token;
+    authorized: ({ token }) => {
+      // Allow access if the token exists
+      return !!token;
     },
   },
 });
 
 export const config = {
   matcher: [
-    // Exclude NextAuth auth routes, login page, static files, assets, and API uploads
+    // Exclude NextAuth auth routes, login page, static files, Next.js internals, and specific API routes
     "/((?!api/auth|login|static|.*\\..*|_next|api/cache/upload).*)",
   ],
 };
