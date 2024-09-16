@@ -9,29 +9,12 @@
 
 // gpt-o1 middleware.ts
 
-import { NextResponse } from 'next/server';
-import { withAuth } from 'next-auth/middleware';
+import { withAuth } from "next-auth/middleware";
 
-// Custom middleware to log requests
-export function middleware(req) {
-  console.log(`Request Method: ${req.method}, Request URL: ${req.url}`);
-
-  if (req.method === 'POST' || req.method === 'PUT') {
-    req.clone().json().then(body => {
-      console.log('Request Payload:', body);
-    }).catch(() => {
-      console.log('Failed to parse request payload');
-    });
-  }
-
-  return NextResponse.next();
-}
-
-// Authentication middleware
 export default withAuth({
   callbacks: {
     authorized: ({ token }) => {
-      console.log("token.email", token?.email);
+      // Allow access if the token exists
       return !!token;
     },
   },
