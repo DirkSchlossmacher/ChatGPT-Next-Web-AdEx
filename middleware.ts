@@ -15,10 +15,28 @@ export default withAuth({
   callbacks: {
     authorized: ({ token }) => {
       // Allow access if the token exists
-      console.log("token", token);
+      console.log("token.email", token);
       return !!token;
     },
   },
+  async middleware(req, res, next) {
+    // Log the request method and URL
+    console.log(`Request Method: ${req.method}, Request URL: ${req.url}`);
+
+    // Log the request payload if it's a POST or PUT request
+    if (req.method === 'POST' || req.method === 'PUT') {
+      let body = '';
+      req.on('data', chunk => {
+        body += chunk.toString();
+      });
+      req.on('end', () => {
+        console.log('Request Payload:', body);
+      });
+    }
+
+    // Call the next middleware or route handler
+    next();
+  }
 });
 
 export const config = {
