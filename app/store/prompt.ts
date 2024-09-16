@@ -152,7 +152,7 @@ export const usePromptStore = createPersistStore(
       type PromptList = Array<[string, string]>;
 
       // Temporarily disable the fetching of prompts.json by commenting out the fetch block
-      /* */
+      /*
       fetch(PROMPT_URL)
         .then((res) => res.json())
         .then((res) => {
@@ -181,7 +181,7 @@ export const usePromptStore = createPersistStore(
             res.en.length + res.cn.length + res.tw.length;
           SearchService.init(allPromptsForSearch, userPrompts);
         });
-      /* */
+      */
 
       // You may want to add some temporary code to initialize your prompts if needed
       // For example, you can initialize SearchService with empty arrays or default data
