@@ -31,19 +31,19 @@ const config = getClientConfig();
 export const DEFAULT_CONFIG = {
   lastUpdate: Date.now(), // timestamp, to merge state
 
-  submitKey: SubmitKey.CtrlEnter,
+  submitKey: SubmitKey.Enter,
   avatar: "1f603",
-  fontSize: 14,
-  fontFamily: "Overpass",
-  theme: Theme.Light as Theme,
+  fontSize: 12,
+  fontFamily: "Overpass, Arial",
+  theme: Theme.Auto as Theme,
   tightBorder: !!config?.isApp,
-  sendPreviewBubble: false,
+  sendPreviewBubble: true,
   enableAutoGenerateTitle: true,
   sidebarWidth: DEFAULT_SIDEBAR_WIDTH,
 
-  disablePromptHint: true,
+  disablePromptHint: false,
 
-  dontShowMaskSplashScreen: true, // dont show splash screen when create chat
+  dontShowMaskSplashScreen: false, // dont show splash screen when create chat
   hideBuiltinMasks: false, // dont add builtin masks
 
   customModels: "",
@@ -57,10 +57,12 @@ export const DEFAULT_CONFIG = {
     max_tokens: 4000,
     presence_penalty: 0,
     frequency_penalty: 0,
-    sendMemory: true,
+    sendMemory: false,
     historyMessageCount: 40,
     compressMessageLengthThreshold: 99000,
-    enableInjectSystemPrompts: false,
+    compressModel: "gpt-4o-mini" as ModelType,
+    compressProviderName: "OpenAI" as ServiceProvider,
+    enableInjectSystemPrompts: true,
     template: config?.template ?? DEFAULT_INPUT_TEMPLATE,
     size: "1024x1024" as DalleSize,
     quality: "standard" as DalleQuality,
@@ -110,7 +112,7 @@ export const useAppConfig = createPersistStore(
   { ...DEFAULT_CONFIG },
   (set, get) => ({
     reset() {
-      set(() => ({ ...DEFAULT_CONFIG }));      
+      set(() => ({ ...DEFAULT_CONFIG }));
     },
 
     mergeModels(newModels: LLMModel[]) {
@@ -131,8 +133,6 @@ export const useAppConfig = createPersistStore(
         modelMap[`${model.name}@${model?.provider?.id}`] = model;
       }
 
-      console.log("modelMap useAppConfig: ", modelMap);
-
       set(() => ({
         models: Object.values(modelMap),
       }));
@@ -146,8 +146,6 @@ export const useAppConfig = createPersistStore(
     migrate(persistedState, version) {
       const state = persistedState as ChatConfig;
 
-      console.log("get useAppConfig: ", state);
-
       if (version < 3.4) {
         state.modelConfig.sendMemory = true;
         state.modelConfig.historyMessageCount = 4;
@@ -160,7 +158,7 @@ export const useAppConfig = createPersistStore(
       }
 
       if (version < 3.5) {
-//        state.customModels = "claude,claude-100k";
+        state.customModels = "claude,claude-100k";
       }
 
       if (version < 3.6) {
