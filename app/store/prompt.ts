@@ -147,47 +147,42 @@ export const usePromptStore = createPersistStore(
     },
 
     onRehydrateStorage(state) {
+      if (typeof window === "undefined") {
+        return;
+      }
+
       const PROMPT_URL = "./prompts.json";
 
       type PromptList = Array<[string, string]>;
 
-      try {
-        console.log("trying to fetch prompts");
-
-        fetch(PROMPT_URL)
-          .then((res) => res.json())
-          .then((res) => {
-            let fetchPrompts = [res.en, res.tw, res.cn];
-            if (getLang() === "cn") {
-              fetchPrompts = fetchPrompts.reverse();
-            }
-            const builtinPrompts = fetchPrompts.map(
-              (promptList: PromptList) => {
-                return promptList.map(
-                  ([title, content]) =>
-                    ({
-                      id: nanoid(),
-                      title,
-                      content,
-                      createdAt: Date.now(),
-                    }) as Prompt,
-                );
-              },
+      fetch(PROMPT_URL)
+        .then((res) => res.json())
+        .then((res) => {
+          let fetchPrompts = [res.en, res.tw, res.cn];
+          if (getLang() === "cn") {
+            fetchPrompts = fetchPrompts.reverse();
+          }
+          const builtinPrompts = fetchPrompts.map((promptList: PromptList) => {
+            return promptList.map(
+              ([title, content]) =>
+                ({
+                  id: nanoid(),
+                  title,
+                  content,
+                  createdAt: Date.now(),
+                }) as Prompt,
             );
-
-            const userPrompts =
-              usePromptStore.getState().getUserPrompts() ?? [];
-
-            const allPromptsForSearch = builtinPrompts
-              .reduce((pre, cur) => pre.concat(cur), [])
-              .filter((v) => !!v.title && !!v.content);
-            SearchService.count.builtin =
-              res.en.length + res.cn.length + res.tw.length;
-            SearchService.init(allPromptsForSearch, userPrompts);
           });
-      } catch (e) {
-        console.error(e);
-      }
+
+          const userPrompts = usePromptStore.getState().getUserPrompts() ?? [];
+
+          const allPromptsForSearch = builtinPrompts
+            .reduce((pre, cur) => pre.concat(cur), [])
+            .filter((v) => !!v.title && !!v.content);
+          SearchService.count.builtin =
+            res.en.length + res.cn.length + res.tw.length;
+          SearchService.init(allPromptsForSearch, userPrompts);
+        });
 
       // You may want to add some temporary code to initialize your prompts if needed
       // For example, you can initialize SearchService with empty arrays or default data
