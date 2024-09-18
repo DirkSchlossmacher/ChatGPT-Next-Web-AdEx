@@ -148,6 +148,7 @@ export const usePromptStore = createPersistStore(
 
     onRehydrateStorage(state) {
       if (typeof window === "undefined") {
+        console.warn("Skip rehydrate storage in SSR");
         return;
       }
 
