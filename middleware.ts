@@ -1,4 +1,4 @@
-// export { default } from "next-auth/middleware";
+export { default } from "next-auth/middleware";
 
 // export const config = {
 //   matcher: [
@@ -11,6 +11,7 @@
 
 import { withAuth } from "next-auth/middleware";
 
+/*
 export default withAuth({
   callbacks: {
     authorized: ({ token }) => {
@@ -19,10 +20,10 @@ export default withAuth({
     },
   },
 });
+*/ 
 
 export const config = {
   matcher: [
-    // Exclude NextAuth auth routes, login page, static files, Next.js internals, and specific API routes
-    "/((?!api/auth|login|static|.*\\..*|_next|api/cache/upload).*)",
+    "/",
   ],
 };
