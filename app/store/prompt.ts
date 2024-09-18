@@ -1,7 +1,7 @@
 import Fuse from "fuse.js";
-import { getLang } from "../locales";
-import { StoreKey } from "../constant";
 import { nanoid } from "nanoid";
+import { StoreKey } from "../constant";
+import { getLang } from "../locales";
 import { createPersistStore } from "../utils/store";
 
 export interface Prompt {
@@ -151,34 +151,43 @@ export const usePromptStore = createPersistStore(
 
       type PromptList = Array<[string, string]>;
 
-      fetch("https://adexgpt-backup.vercel.app/prompts.json")
-        .then((res) => res.json())
-        .then((res) => {
-          let fetchPrompts = [res.en, res.tw, res.cn];
-          if (getLang() === "cn") {
-            fetchPrompts = fetchPrompts.reverse();
-          }
-          const builtinPrompts = fetchPrompts.map((promptList: PromptList) => {
-            return promptList.map(
-              ([title, content]) =>
-                ({
-                  id: nanoid(),
-                  title,
-                  content,
-                  createdAt: Date.now(),
-                }) as Prompt,
+      try {
+        console.log("trying to fetch prompts");
+
+        fetch("https://adexgpt-backup.vercel.app/prompts.json")
+          .then((res) => res.json())
+          .then((res) => {
+            let fetchPrompts = [res.en, res.tw, res.cn];
+            if (getLang() === "cn") {
+              fetchPrompts = fetchPrompts.reverse();
+            }
+            const builtinPrompts = fetchPrompts.map(
+              (promptList: PromptList) => {
+                return promptList.map(
+                  ([title, content]) =>
+                    ({
+                      id: nanoid(),
+                      title,
+                      content,
+                      createdAt: Date.now(),
+                    }) as Prompt,
+                );
+              },
             );
+
+            const userPrompts =
+              usePromptStore.getState().getUserPrompts() ?? [];
+
+            const allPromptsForSearch = builtinPrompts
+              .reduce((pre, cur) => pre.concat(cur), [])
+              .filter((v) => !!v.title && !!v.content);
+            SearchService.count.builtin =
+              res.en.length + res.cn.length + res.tw.length;
+            SearchService.init(allPromptsForSearch, userPrompts);
           });
-
-          const userPrompts = usePromptStore.getState().getUserPrompts() ?? [];
-
-          const allPromptsForSearch = builtinPrompts
-            .reduce((pre, cur) => pre.concat(cur), [])
-            .filter((v) => !!v.title && !!v.content);
-          SearchService.count.builtin =
-            res.en.length + res.cn.length + res.tw.length;
-          SearchService.init(allPromptsForSearch, userPrompts);
-        });
+      } catch (e) {
+        console.error(e);
+      }
 
       // You may want to add some temporary code to initialize your prompts if needed
       // For example, you can initialize SearchService with empty arrays or default data
