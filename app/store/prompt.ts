@@ -154,7 +154,7 @@ export const usePromptStore = createPersistStore(
       try {
         console.log("trying to fetch prompts");
 
-        fetch("https://adexgpt-backup.vercel.app/prompts.json")
+        fetch(PROMPT_URL)
           .then((res) => res.json())
           .then((res) => {
             let fetchPrompts = [res.en, res.tw, res.cn];
