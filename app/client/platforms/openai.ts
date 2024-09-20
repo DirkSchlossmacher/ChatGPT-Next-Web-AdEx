@@ -47,9 +47,7 @@ import {
 // import { NextApiRequest, NextApiResponse } from 'next';
 //import { getServerSession } from "next-auth";
 
-import { getServerAuthSession } from "@/app/auth";
 //import { authOptions } from "@/app/auth";
-import { incrementAPICallCount } from '../../utils/cloud/redisRestClient';
 // app\utils\cloud\redisRestClient.ts
 // app\client\platforms\openai.ts
 // app\auth.ts
@@ -59,7 +57,6 @@ export async function getMyServerSession() {
   return await getServerAuthSession();
 }
 */
-
 
 export interface OpenAIListModelResponse {
   object: string;
@@ -157,6 +154,7 @@ export class ChatGPTApi implements LLMApi {
         },
       ];
     }
+
     return res.choices?.at(0)?.message?.content ?? res;
   }
 
@@ -221,12 +219,13 @@ export class ChatGPTApi implements LLMApi {
       "gpt-4-0125-preview",
       "gpt-4-1106-vision",
       "gpt-4-1106-vision-preview",
-      "gpt-4o"
-      
+      "gpt-4o",
     ];
 
     // Check if the current model is in the list of models to replace
-    const finalModel = modelsToReplace.includes(modelConfig.model) ? "gpt-4o-mini" : modelConfig.model;
+    const finalModel = modelsToReplace.includes(modelConfig.model)
+      ? "gpt-4o-mini"
+      : modelConfig.model;
 
     let requestPayload: RequestPayload | DalleRequestPayload;
 
@@ -314,6 +313,9 @@ export class ChatGPTApi implements LLMApi {
           isDalle3 ? OpenaiPath.ImagePath : OpenaiPath.ChatPath,
         );
       }
+
+      console.log("JULIUS", "Streaming enabled");
+
       if (shouldStream) {
         const [tools, funcs] = usePluginStore
           .getState()
@@ -357,6 +359,13 @@ export class ChatGPTApi implements LLMApi {
                 runTools[index]["function"]["arguments"] += args;
               }
             }
+
+            console.log(
+              "JULIUS",
+              "returned content:",
+              choices[0]?.delta?.content,
+            );
+
             return choices[0]?.delta?.content;
           },
           // processToolMessage, include tool_calls message and tool call results
