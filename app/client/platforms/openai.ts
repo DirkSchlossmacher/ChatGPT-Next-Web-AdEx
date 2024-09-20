@@ -2,10 +2,10 @@
 // azure and openai, using same models. so using same LLMApi.
 import {
   ApiPath,
+  Azure,
   DEFAULT_API_HOST,
   DEFAULT_MODELS,
   OpenaiPath,
-  Azure,
   REQUEST_TIMEOUT_MS,
   ServiceProvider,
 } from "@/app/constant";
@@ -16,16 +16,23 @@ import {
   useChatStore,
   usePluginStore,
 } from "@/app/store";
-import { collectModelsWithDefaultModel } from "@/app/utils/model";
+import { DalleQuality, DalleSize, DalleStyle } from "@/app/typing";
 import {
-  preProcessImageContent,
-  uploadImage,
   base64Image2Blob,
+  preProcessImageContent,
   stream,
+  uploadImage,
 } from "@/app/utils/chat";
 import { cloudflareAIGatewayUrl } from "@/app/utils/cloudflare";
-import { DalleSize, DalleQuality, DalleStyle } from "@/app/typing";
+import { collectModelsWithDefaultModel } from "@/app/utils/model";
 
+import { getClientConfig } from "@/app/config/client";
+import {
+  isDalle3 as _isDalle3,
+  getMessageTextContent,
+  isVisionModel,
+} from "@/app/utils";
+import Locale from "../../locales";
 import {
   ChatOptions,
   getHeaders,
@@ -35,13 +42,6 @@ import {
   MultimodalContent,
   SpeechOptions,
 } from "../api";
-import Locale from "../../locales";
-import { getClientConfig } from "@/app/config/client";
-import {
-  getMessageTextContent,
-  isVisionModel,
-  isDalle3 as _isDalle3,
-} from "@/app/utils";
 
 //# for AdEx custom usage tracking (calls per model per user per datekey)
 // import { NextApiRequest, NextApiResponse } from 'next';
@@ -314,7 +314,10 @@ export class ChatGPTApi implements LLMApi {
         );
       }
 
-      console.log("JULIUS", "Streaming enabled");
+      console.log("JULIUS", {
+        shouldStream,
+        streamOptions: options.config.stream,
+      });
 
       if (shouldStream) {
         const [tools, funcs] = usePluginStore
@@ -403,6 +406,11 @@ export class ChatGPTApi implements LLMApi {
         clearTimeout(requestTimeoutId);
 
         const resJson = await res.json();
+
+        console.log("JULIUS", {
+          resJson,
+        });
+
         const message = await this.extractMessage(resJson);
         options.onFinish(message);
       }
