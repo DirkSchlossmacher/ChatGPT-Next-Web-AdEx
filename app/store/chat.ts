@@ -398,8 +398,6 @@ export const useChatStore = createPersistStore(
           onFinish(message) {
             botMessage.streaming = false;
 
-            console.log("JULIUS", "NEW MESSAGE: ", message);
-
             if (message) {
               botMessage.content = message;
               get().onNewMessage(botMessage);

@@ -277,7 +277,11 @@ export class ChatGPTApi implements LLMApi {
 
     console.log("[Request] openai payload: ", requestPayload);
 
-    const shouldStream = !isDalle3 && !!options.config.stream;
+    let shouldStream = !isDalle3 && !!options.config.stream;
+    if (isO1) {
+      shouldStream = false;
+    }
+
     const controller = new AbortController();
     options.onController?.(controller);
 
@@ -313,11 +317,6 @@ export class ChatGPTApi implements LLMApi {
           isDalle3 ? OpenaiPath.ImagePath : OpenaiPath.ChatPath,
         );
       }
-
-      console.log("JULIUS", {
-        shouldStream,
-        streamOptions: options.config.stream,
-      });
 
       if (shouldStream) {
         const [tools, funcs] = usePluginStore
@@ -363,12 +362,6 @@ export class ChatGPTApi implements LLMApi {
               }
             }
 
-            console.log(
-              "JULIUS",
-              "returned content:",
-              choices[0]?.delta?.content,
-            );
-
             return choices[0]?.delta?.content;
           },
           // processToolMessage, include tool_calls message and tool call results
@@ -406,10 +399,6 @@ export class ChatGPTApi implements LLMApi {
         clearTimeout(requestTimeoutId);
 
         const resJson = await res.json();
-
-        console.log("JULIUS", {
-          resJson,
-        });
 
         const message = await this.extractMessage(resJson);
         options.onFinish(message);
