@@ -147,11 +147,11 @@ export const usePromptStore = createPersistStore(
     },
 
     onRehydrateStorage(state) {
+      // Skip store rehydration on server side
       if (typeof window === "undefined") {
-        console.warn("Skip rehydrate storage in SSR");
         return;
       }
-
+      
       const PROMPT_URL = "./prompts.json";
 
       type PromptList = Array<[string, string]>;
