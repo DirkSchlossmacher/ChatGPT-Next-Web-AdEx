@@ -616,6 +616,7 @@ export const useChatStore = createPersistStore(
               providerName,
             },
             onFinish(message) {
+              if (!isValidMessage(message)) return;
               get().updateCurrentSession(
                 (session) =>
                   (session.topic =
@@ -690,6 +691,10 @@ export const useChatStore = createPersistStore(
               console.error("[Summarize] ", err);
             },
           });
+        }
+
+        function isValidMessage(message: any): boolean {
+          return typeof message === "string" && !message.startsWith("```json");
         }
       },
 
