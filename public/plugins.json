@@ -17,6 +17,6 @@
   {
     "id": "adexwebsitesearch",
     "name": "AdExWebsiteSearch",
-    "schema": "https://ghp.ci/https://github.com/DirkSchlossmacher/api-router/blob/1cc1ce2e119a952a5c77c28511eb0586e944d706/public/adex-website/openapi.json"
+    "schema": "https://ghp.ci/https://raw.githubusercontent.com/DirkSchlossmacher/api-router/main/public/adex-website/openapi.json"
   }
 ]
