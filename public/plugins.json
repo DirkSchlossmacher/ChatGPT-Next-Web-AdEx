@@ -18,5 +18,10 @@
     "id": "adexwebsitesearch",
     "name": "AdExWebsiteSearch",
     "schema": "https://ghp.ci/https://raw.githubusercontent.com/DirkSchlossmacher/api-router/main/public/adex-website/openapi.json"
+  },
+  {
+    "id": "adexgptmemory",
+    "name": "AdExGptMemory",
+    "schema": "https://ghp.ci/https://raw.githubusercontent.com/DirkSchlossmacher/api-router/main/public/adex-memory/openapi.json"
   }
 ]
