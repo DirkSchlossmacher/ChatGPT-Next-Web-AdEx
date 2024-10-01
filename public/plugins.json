@@ -21,7 +21,7 @@
   },
   {
     "id": "adexgptmemory",
-    "name": "AdExGptMemory2",
+    "name": "AdExGptMemory",
     "schema": "https://ghp.ci/https://raw.githubusercontent.com/DirkSchlossmacher/api-router/main/public/adex-memory/openapi.json"
   }
 ]
