@@ -16,12 +16,12 @@
   },
   {
     "id": "adexwebsitesearch",
-    "name": "AdExWebsiteSearch",
+    "name": "AdExWebsiteSearchV2",
     "schema": "https://ghp.ci/https://raw.githubusercontent.com/DirkSchlossmacher/api-router/main/public/adex-website/openapi.json"
   },
   {
-    "id": "adexgptmemory2",
-    "name": "AdExGptMemory",
+    "id": "adexgptmemory",
+    "name": "AdExGptMemory2",
     "schema": "https://ghp.ci/https://raw.githubusercontent.com/DirkSchlossmacher/api-router/main/public/adex-memory/openapi.json"
   }
 ]
