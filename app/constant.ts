@@ -249,7 +249,7 @@ export const KnowledgeCutOffDate: Record<string, string> = {
   "gpt-4o-mini-2024-07-18": "2023-10",
   "gpt-4-vision-preview": "2023-04",
   "o1-mini": "2023-10",
-  // "o1-preview": "2023-10", 
+  "o1-preview": "2023-10", 
   // After improvements,
   // it's now easier to add "KnowledgeCutOffDate" instead of stupid hardcoding it, as was done previously.
   "gemini-pro": "2023-12",
@@ -349,12 +349,14 @@ const alibabaModes = [
 ];
 
 const tencentModels = [
-  // "hunyuan-pro",
+/*
+ "hunyuan-pro",
   "hunyuan-standard",
   "hunyuan-lite",
   "hunyuan-role",
   "hunyuan-functioncall",
   "hunyuan-code",
+*/  
   "hunyuan-vision",
 ];
 
@@ -380,9 +382,7 @@ export const DEFAULT_MODELS = [
       providerType: "openai",
       sorted: 1, // 这里是固定的，确保顺序与之前内置的版本一致
     },
-  }))
-  /*
-  ,
+  })),
   ...openaiModels.map((name) => ({
     name,
     available: false,
@@ -482,7 +482,6 @@ export const DEFAULT_MODELS = [
       sorted: 10,
     },
   })),
-  */
 ] as const;
 
 export const CHAT_PAGE_SIZE = 15;
