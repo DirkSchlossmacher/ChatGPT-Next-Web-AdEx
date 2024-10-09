@@ -222,7 +222,7 @@ export function stream(
               ),
             )
               .then((res) => {
-                let content = res.data || res?.statusText;
+                let content = res.data.toString() || res?.statusText;
                 if (res.status >= 300) {
                   return Promise.reject(content);
                 }
