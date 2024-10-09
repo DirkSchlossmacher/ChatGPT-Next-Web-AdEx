@@ -222,19 +222,12 @@ export function stream(
               ),
             )
               .then((res) => {
-                let content;
-
-                // Check if the response data is an object
-                if (typeof res.data === 'object') {
-                  content = JSON.stringify(res.data);
-                } else {
-                  content = res.data; // This will handle strings or other types
-                }
-
-                // If the response status indicates an error
+                let content = res.data || res?.statusText;
                 if (res.status >= 300) {
-                  return Promise.reject(content || res?.statusText);
+                  return Promise.reject(content);
                 }
+                console.log("[runTools (content)]", content);
+                return content;
               })
               .then((content) => {
                 options?.onAfterTool?.({
@@ -259,6 +252,8 @@ export function stream(
               }));
           }),
         ).then((toolCallResult) => {
+          // Log the final content derived from all tool calls
+          console.log("[Final Tool Call Results]", toolCallResult);
           processToolMessage(requestPayload, toolCallMessage, toolCallResult);
           setTimeout(() => {
             // call again
