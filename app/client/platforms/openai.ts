@@ -5,6 +5,7 @@ import {
   OPENAI_BASE_URL,
   DEFAULT_MODELS,
   OpenaiPath,
+  Azure,
   REQUEST_TIMEOUT_MS,
   ServiceProvider,
 } from "@/app/constant";
@@ -15,23 +16,16 @@ import {
   useChatStore,
   usePluginStore,
 } from "@/app/store";
-import { DalleQuality, DalleSize, DalleStyle } from "@/app/typing";
+import { collectModelsWithDefaultModel } from "@/app/utils/model";
 import {
-  base64Image2Blob,
   preProcessImageContent,
-  stream,
   uploadImage,
+  base64Image2Blob,
+  stream,
 } from "@/app/utils/chat";
 import { cloudflareAIGatewayUrl } from "@/app/utils/cloudflare";
-import { collectModelsWithDefaultModel } from "@/app/utils/model";
+import { DalleSize, DalleQuality, DalleStyle } from "@/app/typing";
 
-import { getClientConfig } from "@/app/config/client";
-import {
-  isDalle3 as _isDalle3,
-  getMessageTextContent,
-  isVisionModel,
-} from "@/app/utils";
-import Locale from "../../locales";
 import {
   ChatOptions,
   getHeaders,
@@ -41,21 +35,13 @@ import {
   MultimodalContent,
   SpeechOptions,
 } from "../api";
-
-//# for AdEx custom usage tracking (calls per model per user per datekey)
-// import { NextApiRequest, NextApiResponse } from 'next';
-//import { getServerSession } from "next-auth";
-
-//import { authOptions } from "@/app/auth";
-// app\utils\cloud\redisRestClient.ts
-// app\client\platforms\openai.ts
-// app\auth.ts
-
-/*
-export async function getMyServerSession() {
-  return await getServerAuthSession();
-}
-*/
+import Locale from "../../locales";
+import { getClientConfig } from "@/app/config/client";
+import {
+  getMessageTextContent,
+  isVisionModel,
+  isDalle3 as _isDalle3,
+} from "@/app/utils";
 
 export interface OpenAIListModelResponse {
   object: string;
@@ -153,7 +139,6 @@ export class ChatGPTApi implements LLMApi {
         },
       ];
     }
-
     return res.choices?.at(0)?.message?.content ?? res;
   }
 
@@ -277,7 +262,6 @@ export class ChatGPTApi implements LLMApi {
     console.log("[Request] openai payload: ", requestPayload);
 
     const shouldStream = !isDalle3 && !!options.config.stream && !isO1;
-
     const controller = new AbortController();
     options.onController?.(controller);
 
@@ -313,7 +297,6 @@ export class ChatGPTApi implements LLMApi {
           isDalle3 ? OpenaiPath.ImagePath : OpenaiPath.ChatPath,
         );
       }
-
       if (shouldStream) {
         let index = -1;
         const [tools, funcs] = usePluginStore
@@ -321,7 +304,7 @@ export class ChatGPTApi implements LLMApi {
           .getAsTools(
             useChatStore.getState().currentSession().mask?.plugin || [],
           );
-        // console.log("getAsTools", tools, funcs);
+        console.log("getAsTools", tools, funcs);
         stream(
           chatPath,
           requestPayload,
@@ -358,7 +341,6 @@ export class ChatGPTApi implements LLMApi {
                 runTools[index]["function"]["arguments"] += args;
               }
             }
-
             return choices[0]?.delta?.content;
           },
           // processToolMessage, include tool_calls message and tool call results
@@ -398,7 +380,6 @@ export class ChatGPTApi implements LLMApi {
         clearTimeout(requestTimeoutId);
 
         const resJson = await res.json();
-
         const message = await this.extractMessage(resJson);
         options.onFinish(message);
       }
