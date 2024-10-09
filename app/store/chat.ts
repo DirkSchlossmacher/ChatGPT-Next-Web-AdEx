@@ -579,7 +579,7 @@ export const useChatStore = createPersistStore(
           ...systemPrompts,
           ...longTermMemoryPrompts,
           ...contextPrompts,
-          ...reversedRecentMessages, // was: ...reversedRecentMessages.reverse(), - which resulted in wrong, inverse order of added chat history, so fixed now
+          ...reversedRecentMessages.reverse(),
         ];
 
         return recentMessages;
