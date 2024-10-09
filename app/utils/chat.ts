@@ -222,11 +222,19 @@ export function stream(
               ),
             )
               .then((res) => {
-                let content = res.data.toString() || res?.statusText;
-                if (res.status >= 300) {
-                  return Promise.reject(content);
+                let content;
+
+                // Check if the response data is an object
+                if (typeof res.data === 'object') {
+                  content = JSON.stringify(res.data);
+                } else {
+                  content = res.data; // This will handle strings or other types
                 }
-                return content;
+
+                // If the response status indicates an error
+                if (res.status >= 300) {
+                  return Promise.reject(content || res?.statusText);
+                }
               })
               .then((content) => {
                 options?.onAfterTool?.({
