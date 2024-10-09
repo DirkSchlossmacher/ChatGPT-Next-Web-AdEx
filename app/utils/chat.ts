@@ -227,6 +227,7 @@ export function stream(
                   return Promise.reject(content);
                 }
                 console.log("[runTools (content)]", content);
+                
                 return content;
               })
               .then((content) => {
@@ -272,7 +273,7 @@ export function stream(
       options.onFinish(responseText + remainText);
     }
   };
-
+  
   controller.signal.onabort = finish;
 
   function chatApi(
