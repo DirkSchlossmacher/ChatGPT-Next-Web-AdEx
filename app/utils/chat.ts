@@ -226,6 +226,12 @@ export function stream(
                 if (res.status >= 300) {
                   return Promise.reject(content);
                 }
+                // Check if the response data is an object
+                if (typeof res.data === 'object') {
+                  content = JSON.stringify(res.data);
+                } else {
+                  content = res.data; // This will handle strings or other types
+                }
                 console.log("[runTools (content)]", content);
                 
                 return content;
