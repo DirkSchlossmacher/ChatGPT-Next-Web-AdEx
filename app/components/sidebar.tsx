@@ -168,11 +168,17 @@ export function SideBarHeader(props: {
   subTitle?: string | React.ReactNode;
   logo?: React.ReactNode;
   children?: React.ReactNode;
+  shouldNarrow?: boolean;
 }) {
-  const { title, subTitle, logo, children } = props;
+  const { title, subTitle, logo, children, shouldNarrow } = props;
   return (
     <Fragment>
-      <div className={styles["sidebar-header"]} data-tauri-drag-region>
+      <div
+        className={`${styles["sidebar-header"]} ${
+          shouldNarrow ? styles["sidebar-header-narrow"] : ""
+        }`}
+        data-tauri-drag-region
+      >
         <div className={styles["sidebar-title-container"]}>
           <div className={styles["sidebar-title"]} data-tauri-drag-region>
             {title}
@@ -230,6 +236,7 @@ export function SideBar(props: { className?: string }) {
         title="AdExGPT - via API"
         subTitle="secure local UI for OpenAI API."
         logo={<AdExIcon />}
+        shouldNarrow={shouldNarrow}
       >
         <div className={styles["sidebar-header-bar"]}>
           <IconButton
