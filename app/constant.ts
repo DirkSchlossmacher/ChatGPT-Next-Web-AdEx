@@ -544,6 +544,7 @@ export const DEFAULT_MODELS = [
       sorted: 12,
     },
   })),
+  */
 ] as const;
 
 export const CHAT_PAGE_SIZE = 15;
