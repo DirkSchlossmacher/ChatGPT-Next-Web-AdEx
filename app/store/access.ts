@@ -14,12 +14,14 @@ import {
   STABILITY_BASE_URL,
   IFLYTEK_BASE_URL,
   XAI_BASE_URL,
+  CHATGLM_BASE_URL,
 } from "../constant";
 import { getHeaders } from "../client/api";
 import { getClientConfig } from "../config/client";
 import { createPersistStore } from "../utils/store";
 import { ensure } from "../utils/clone";
 import { DEFAULT_CONFIG } from "./config";
+import { getModelProvider } from "../utils/model";
 
 let fetchState = 0; // 0 not fetch, 1 fetching, 2 done
 
@@ -46,6 +48,8 @@ const DEFAULT_STABILITY_URL = isApp ? STABILITY_BASE_URL : ApiPath.Stability;
 const DEFAULT_IFLYTEK_URL = isApp ? IFLYTEK_BASE_URL : ApiPath.Iflytek;
 
 const DEFAULT_XAI_URL = isApp ? XAI_BASE_URL : ApiPath.XAI;
+
+const DEFAULT_CHATGLM_URL = isApp ? CHATGLM_BASE_URL : ApiPath.ChatGLM;
 
 const DEFAULT_ACCESS_STATE = {
   accessCode: "",
@@ -107,7 +111,11 @@ const DEFAULT_ACCESS_STATE = {
   // xai
   xaiUrl: DEFAULT_XAI_URL,
   xaiApiKey: "",
-  
+
+  // chatglm
+  chatglmUrl: DEFAULT_CHATGLM_URL,
+  chatglmApiKey: "",
+
   // server config
   needCode: true,
   hideUserApiKey: false,
@@ -181,6 +189,10 @@ export const useAccessStore = createPersistStore(
       return ensure(get(), ["xaiApiKey"]);
     },
 
+    isValidChatGLM() {
+      return ensure(get(), ["chatglmApiKey"]);
+    },
+
     isAuthorized() {
       this.fetch();
 
@@ -197,6 +209,7 @@ export const useAccessStore = createPersistStore(
         this.isValidMoonshot() ||
         this.isValidIflytek() ||
         this.isValidXAI() ||
+        this.isValidChatGLM() ||
         !this.enabledAccessControl() ||
         (this.enabledAccessControl() && ensure(get(), ["accessCode"]))
       );
@@ -215,9 +228,9 @@ export const useAccessStore = createPersistStore(
         .then((res) => {
           const defaultModel = res.defaultModel ?? "";
           if (defaultModel !== "") {
-            const [model, providerName] = defaultModel.split("@");
+            const [model, providerName] = getModelProvider(defaultModel);
             DEFAULT_CONFIG.modelConfig.model = model;
-            DEFAULT_CONFIG.modelConfig.providerName = providerName;
+            DEFAULT_CONFIG.modelConfig.providerName = providerName as any;
           }
 
           return res;
