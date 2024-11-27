@@ -3,7 +3,7 @@ import { BuiltinMask } from "./typing";
 export const EN_MASKS: BuiltinMask[] = [
    {
       "avatar":"1f9d1-200d-1f3eb",
-      "name":"(V4.0) AdEx Hyper-personalized training: GenAI Prompting ",
+      "name":"(V4.0.1) AdEx Hyper-personalized training: GenAI Prompting ",
       "context":[
          {
             "id":"Y2OLhkjLzAz9fXOfieC7Z",
@@ -48,7 +48,7 @@ export const EN_MASKS: BuiltinMask[] = [
       },
       "lang":"en",
       "builtin":false,
-      "createdAt":1727761180960,
+      "createdAt":1727761180961,
       "plugin":[
          
       ]
