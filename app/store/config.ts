@@ -95,7 +95,7 @@ export const DEFAULT_CONFIG = {
   realtimeConfig: {
     enable: false,
     provider: "OpenAI" as ServiceProvider,
-    model: "gpt-4o-realtime-preview-2024-10-01",
+    model: "gpt-4o-mini-realtime-preview", // gpt-4o-mini-realtime-preview - gpt-4o-realtime-preview-2024-10-01
     apiKey: "",
     azure: {
       endpoint: "",

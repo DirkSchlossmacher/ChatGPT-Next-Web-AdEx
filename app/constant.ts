@@ -269,6 +269,7 @@ export const KnowledgeCutOffDate: Record<string, string> = {
   "gpt-4o-mini": "2023-10",
   "gpt-4o-mini-2024-07-18": "2023-10",
   "gpt-4-vision-preview": "2023-04",
+  "o1": "2023-10",
   "o1-mini": "2023-10",
   "o1-preview": "2023-10", 
   // After improvements,
@@ -311,6 +312,7 @@ const openaiModels = [
   // "gpt-4-vision-preview",
   // "gpt-4-turbo-2024-04-09"
   "dall-e-3",
+  "o1",
   "o1-mini",
   "o1-preview",
 ];
