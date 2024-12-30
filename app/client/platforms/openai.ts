@@ -55,7 +55,7 @@ export interface OpenAIListModelResponse {
 
 export interface RequestPayload {
   messages: {
-    role: "system" | "user" | "assistant";
+    role: "system" | "user" | "assistant" | "developer";
     content: string | MultimodalContent[];
   }[];
   stream?: boolean;
@@ -239,9 +239,11 @@ export class ChatGPTApi implements LLMApi {
         const content = visionModel
           ? await preProcessImageContent(v.content)
           : getMessageTextContent(v);
-        if (!(isO1 && v.role === "system"))
-          messages.push({ role: v.role, content });
-      }
+          if (!isO1final && !(isO1 && v.role === "system"))
+            messages.push({ role: v.role, content });
+          if ((isO1final && v.role === "system"))
+            messages.push({ role: "developer", content });
+          }
 
       // O1 not support image, tools (plugin in ChatGPTNextWeb) and system, stream, logprobs, temperature, top_p, n, presence_penalty, frequency_penalty yet.
       requestPayload = {
@@ -269,7 +271,7 @@ export class ChatGPTApi implements LLMApi {
 
     console.log("[Request] openai payload: ", requestPayload);
 
-    const shouldStream = !isDalle3 && !!options.config.stream;
+    const shouldStream = !isDalle3 && !isO1final && !!options.config.stream;
     const controller = new AbortController();
     options.onController?.(controller);
 
