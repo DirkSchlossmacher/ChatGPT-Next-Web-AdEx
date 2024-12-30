@@ -55,7 +55,7 @@ export interface OpenAIListModelResponse {
 
 export interface RequestPayload {
   messages: {
-    role: "system" | "user" | "assistant" | "developer";
+    role: "system" | "user" | "assistant";
     content: string | MultimodalContent[];
   }[];
   stream?: boolean;
@@ -242,7 +242,7 @@ export class ChatGPTApi implements LLMApi {
           if (!isO1final && !(isO1 && v.role === "system"))
             messages.push({ role: v.role, content });
           if ((isO1final && v.role === "system"))
-            messages.push({ role: "developer", content });
+            // messages.push({ role: "developer", content });
           }
 
       // O1 not support image, tools (plugin in ChatGPTNextWeb) and system, stream, logprobs, temperature, top_p, n, presence_penalty, frequency_penalty yet.
