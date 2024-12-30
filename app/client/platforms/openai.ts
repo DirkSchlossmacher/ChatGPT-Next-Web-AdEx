@@ -239,11 +239,9 @@ export class ChatGPTApi implements LLMApi {
         const content = visionModel
           ? await preProcessImageContent(v.content)
           : getMessageTextContent(v);
-          if (!isO1final && !(isO1 && v.role === "system"))
-            messages.push({ role: v.role, content });
-          if ((isO1final && v.role === "system"))
-            // messages.push({ role: "developer", content });
-          }
+        if (!(isO1 && v.role === "system"))
+          messages.push({ role: v.role, content });
+      }
 
       // O1 not support image, tools (plugin in ChatGPTNextWeb) and system, stream, logprobs, temperature, top_p, n, presence_penalty, frequency_penalty yet.
       requestPayload = {
