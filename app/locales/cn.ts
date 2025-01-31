@@ -106,6 +106,7 @@ const cn = {
       copyLastMessage: "复制最后一个回复",
       copyLastCode: "复制最后一个代码块",
       showShortcutKey: "显示快捷方式",
+      clearContext: "清除上下文",
     },
   },
   Export: {
@@ -636,6 +637,9 @@ const cn = {
   },
   Discovery: {
     Name: "发现",
+  },
+  Mcp: {
+    Name: "MCP",
   },
   FineTuned: {
     Sysmessage: "你是一个助手",

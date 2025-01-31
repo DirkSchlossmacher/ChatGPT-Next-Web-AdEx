@@ -6,7 +6,7 @@ import { ServiceProvider } from "./constant";
 // import { fetch as tauriFetch, ResponseType } from "@tauri-apps/api/http";
 import { fetch as tauriStreamFetch } from "./utils/stream";
 import { VISION_MODEL_REGEXES, EXCLUDE_VISION_MODEL_REGEXES } from "./constant";
-import { getClientConfig } from "./config/client";
+import { useAccessStore } from "./store";
 import { ModelSize } from "./typing";
 
 export function trimTopic(topic: string) {
@@ -241,6 +241,28 @@ export function getMessageTextContent(message: RequestMessage) {
   return "";
 }
 
+export function getMessageTextContentWithoutThinking(message: RequestMessage) {
+  let content = "";
+
+  if (typeof message.content === "string") {
+    content = message.content;
+  } else {
+    for (const c of message.content) {
+      if (c.type === "text") {
+        content = c.text ?? "";
+        break;
+      }
+    }
+  }
+
+  // Filter out thinking lines (starting with "> ")
+  return content
+    .split("\n")
+    .filter((line) => !line.startsWith("> ") && line.trim() !== "")
+    .join("\n")
+    .trim();
+}
+
 export function getMessageImages(message: RequestMessage): string[] {
   if (typeof message.content === "string") {
     return [];
@@ -255,10 +277,8 @@ export function getMessageImages(message: RequestMessage): string[] {
 }
 
 export function isVisionModel(model: string) {
-  const clientConfig = getClientConfig();
-  const envVisionModels = clientConfig?.visionModels
-    ?.split(",")
-    .map((m) => m.trim());
+  const visionModels = useAccessStore.getState().visionModels;
+  const envVisionModels = visionModels?.split(",").map((m) => m.trim());
   if (envVisionModels?.includes(model)) {
     return true;
   }

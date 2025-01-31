@@ -47,4 +47,5 @@ dev
 
 masks.json
 
-.codegpt
+# mcp config
+app/mcp/mcp_config.json

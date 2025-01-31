@@ -107,6 +107,7 @@ const en: LocaleType = {
       copyLastMessage: "Copy Last Reply",
       copyLastCode: "Copy Last Code Block",
       showShortcutKey: "Show Shortcuts",
+      clearContext: "Clear Context",
     },
   },
   Export: {
@@ -645,6 +646,9 @@ const en: LocaleType = {
   },
   Discovery: {
     Name: "Discovery",
+  },
+  Mcp: {
+    Name: "MCP",
   },
   FineTuned: {
     Sysmessage: "You are an assistant that",
