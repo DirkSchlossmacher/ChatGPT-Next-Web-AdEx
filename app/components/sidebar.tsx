@@ -252,12 +252,21 @@ export function SideBar(props: { className?: string }) {
       shouldNarrow={shouldNarrow}
       {...props}
     >
-      <SideBarHeader
-        title="AdExGPT - via API"
-        subTitle="secure local UI for OpenAI API."
-        logo={<AdExIcon />}
-        shouldNarrow={shouldNarrow}
-      >
+    <SideBarHeader
+      title="AdExGPT - via API"
+      subTitle={
+        <>
+          <span>secure local UI for OpenAI API.</span>
+          <br />
+          <a href="https://adexpartners.sharepoint.com/sites/HUB_IT/SitePages/GenAICapabilityFAQ.aspx" target="_blank" rel="noopener noreferrer">
+            FAQs - GenAI@AdEx
+          </a>
+        </>
+      }
+      logo={<AdExIcon />}
+      shouldNarrow={shouldNarrow}
+    />
+
         <div className={styles["sidebar-header-bar"]}>
           <IconButton
             icon={<MaskIcon />}
