@@ -248,25 +248,28 @@ export function SideBar(props: { className?: string }) {
 
   return (
     <SideBarContainer
-      onDragStart={onDragStart}
+      onDragStart={(e) => { /* Your implementation */ }}
       shouldNarrow={shouldNarrow}
       {...props}
     >
-    <SideBarHeader
-      title="AdExGPT - via API"
-      subTitle={
-        <>
-          <span>secure local UI for OpenAI API.</span>
-          <br />
-          <a href="https://adexpartners.sharepoint.com/sites/HUB_IT/SitePages/GenAICapabilityFAQ.aspx" target="_blank" rel="noopener noreferrer">
-            FAQs - GenAI@AdEx
-          </a>
-        </>
-      }
-      logo={<AdExIcon />}
-      shouldNarrow={shouldNarrow}
-    />
-
+      <SideBarHeader
+        title="AdExGPT - via API"
+        subTitle={
+          <>
+            <span>secure local UI for OpenAI API.</span>
+            <br />
+            <a
+              href="https://adexpartners.sharepoint.com/sites/HUB_IT/SitePages/GenAICapabilityFAQ.aspx"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              FAQs - GenAI@AdEx
+            </a>
+          </>
+        }
+        logo={<AdExIcon />}
+        shouldNarrow={shouldNarrow}
+      >
         <div className={styles["sidebar-header-bar"]}>
           <IconButton
             icon={<MaskIcon />}
@@ -302,14 +305,10 @@ export function SideBar(props: { className?: string }) {
         </div>
         {showDiscoverySelector && (
           <Selector
-            items={[
-              ...DISCOVERY.map((item) => {
-                return {
-                  title: item.name,
-                  value: item.path,
-                };
-              }),
-            ]}
+            items={DISCOVERY.map((item) => ({
+              title: item.name,
+              value: item.path,
+            }))}
             onClose={() => setshowDiscoverySelector(false)}
             onSelection={(s) => {
               navigate(s[0], { state: { fromHome: true } });
@@ -317,6 +316,7 @@ export function SideBar(props: { className?: string }) {
           />
         )}
       </SideBarHeader>
+
       <SideBarBody
         onClick={(e) => {
           if (e.target === e.currentTarget) {
@@ -326,6 +326,7 @@ export function SideBar(props: { className?: string }) {
       >
         <ChatList narrow={shouldNarrow} />
       </SideBarBody>
+
       <SideBarTail
         primaryAction={
           <>
@@ -377,4 +378,4 @@ export function SideBar(props: { className?: string }) {
       />
     </SideBarContainer>
   );
-}
+};
