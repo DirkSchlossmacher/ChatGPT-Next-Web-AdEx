@@ -477,7 +477,7 @@ const openaiModels = [
   // "gpt-4o-2024-05-13",
   // "gpt-4-vision-preview",
   // "gpt-4-turbo-2024-04-09"
-  //"dall-e-3",
+  "dall-e-3",
   //"o1",
   "o1-mini",
   "o1-preview",
