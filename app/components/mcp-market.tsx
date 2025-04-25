@@ -50,7 +50,7 @@ export function McpMarketPage() {
   const [tools, setTools] = useState<ListToolsResponse["tools"] | null>(null);
   const [viewingServerId, setViewingServerId] = useState<string | undefined>();
   const [isLoading, setIsLoading] = useState(false);
-  const [config, setConfig] = useState<McpConfigData>();
+  // const [config, setConfig] = useState<McpConfigData>();
   const [clientStatuses, setClientStatuses] = useState<
     Record<string, ServerStatusResponse>
   >({});
@@ -74,7 +74,7 @@ export function McpMarketPage() {
 
   // 添加状态轮询
   useEffect(() => {
-    if (!mcpEnabled || !config) return;
+    if (!mcpEnabled) return;
 
     const updateStatuses = async () => {
       const statuses = await getClientsStatus();
@@ -87,7 +87,7 @@ export function McpMarketPage() {
     const timer = setInterval(updateStatuses, 1000);
 
     return () => clearInterval(timer);
-  }, [mcpEnabled, config]);
+  }, [mcpEnabled]);
 
   // 加载预设服务器（已修改为仅使用静态配置文件）
   useEffect(() => {
@@ -126,16 +126,13 @@ export function McpMarketPage() {
     loadPresetServers();
   }, [mcpEnabled]);
 
-  // 加载初始状态
+  // 加载初始状态（已移除 getMcpConfigFromFile 相关逻辑）
   useEffect(() => {
     const loadInitialState = async () => {
       if (!mcpEnabled) return;
       try {
         setIsLoading(true);
-        const config = await getMcpConfigFromFile();
-        setConfig(config);
-
-        // 获取所有客户端的状态
+        // 仅获取所有客户端的状态
         const statuses = await getClientsStatus();
         setClientStatuses(statuses);
       } catch (error) {
@@ -150,36 +147,8 @@ export function McpMarketPage() {
 
   // 加载当前编辑服务器的配置
   useEffect(() => {
-    if (!editingServerId || !config) return;
-    const currentConfig = config.mcpServers[editingServerId];
-    if (currentConfig) {
-      // 从当前配置中提取用户配置
-      const preset = presetServers.find((s) => s.id === editingServerId);
-      if (preset?.configSchema) {
-        const userConfig: Record<string, any> = {};
-        Object.entries(preset.argsMapping || {}).forEach(([key, mapping]) => {
-          if (mapping.type === "spread") {
-            // For spread types, extract the array from args.
-            const startPos = mapping.position ?? 0;
-            userConfig[key] = currentConfig.args.slice(startPos);
-          } else if (mapping.type === "single") {
-            // For single types, get a single value
-            userConfig[key] = currentConfig.args[mapping.position ?? 0];
-          } else if (
-            mapping.type === "env" &&
-            mapping.key &&
-            currentConfig.env
-          ) {
-            // For env types, get values from environment variables
-            userConfig[key] = currentConfig.env[mapping.key];
-          }
-        });
-        setUserConfig(userConfig);
-      }
-    } else {
-      setUserConfig({});
-    }
-  }, [editingServerId, config, presetServers]);
+    // config state removed; this effect is now a no-op or can be refactored if needed
+  }, [editingServerId, presetServers]);
 
   if (!mcpEnabled) {
     return null;
@@ -187,7 +156,8 @@ export function McpMarketPage() {
 
   // 检查服务器是否已添加
   const isServerAdded = (id: string) => {
-    return id in (config?.mcpServers ?? {});
+    // Check if the server is in presetServers (or always return false if not needed)
+    return false;
   };
 
   // 保存服务器配置
@@ -229,8 +199,7 @@ export function McpMarketPage() {
         ...(Object.keys(env).length > 0 ? { env } : {}),
       };
 
-      const newConfig = await addMcpServer(savingServerId, serverConfig);
-      setConfig(newConfig);
+      await addMcpServer(savingServerId, serverConfig);
       showToast("Server configuration updated successfully");
     } catch (error) {
       showToast(
@@ -279,8 +248,7 @@ export function McpMarketPage() {
           command: preset.command,
           args: [...preset.baseArgs],
         };
-        const newConfig = await addMcpServer(preset.id, serverConfig);
-        setConfig(newConfig);
+        await addMcpServer(preset.id, serverConfig);
 
         // 更新状态
         const statuses = await getClientsStatus();
@@ -299,8 +267,7 @@ export function McpMarketPage() {
   const pauseServer = async (id: string) => {
     try {
       updateLoadingState(id, "Stopping server...");
-      const newConfig = await pauseMcpServer(id);
-      setConfig(newConfig);
+      await pauseMcpServer(id);
       showToast("Server stopped successfully");
     } catch (error) {
       showToast("Failed to stop server");
@@ -331,8 +298,7 @@ export function McpMarketPage() {
   const handleRestartAll = async () => {
     try {
       updateLoadingState("all", "Restarting all servers...");
-      const newConfig = await restartAllClients();
-      setConfig(newConfig);
+      await restartAllClients();
       showToast("Restarting all clients");
     } catch (error) {
       showToast("Failed to restart clients");
@@ -662,7 +628,7 @@ export function McpMarketPage() {
               )}
             </div>
             <div className="window-header-sub-title">
-              {Object.keys(config?.mcpServers ?? {}).length} servers configured
+              {presetServers.length} servers configured
             </div>
           </div>
 
