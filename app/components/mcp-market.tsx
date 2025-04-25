@@ -101,8 +101,8 @@ export function McpMarketPage() {
             ([id, serverConfig]) => ({
               id,
               name: id,
-              description: serverConfig.description || "",
-              tags: serverConfig.tags || [],
+              description: (serverConfig as any).description || "",
+              tags: (serverConfig as any).tags || [],
               configurable: false,
               ...serverConfig,
             })
