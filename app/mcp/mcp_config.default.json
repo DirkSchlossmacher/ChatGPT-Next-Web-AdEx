@@ -1,3 +1,7 @@
 {
-  "mcpServers": {}
+  "mcpServers": {
+    "OpenAI4oWebSearchPreview": {
+      "url": "https://n8n.adexpartners.ai/mcp/0c71f8f2-e14b-495d-8839-08ef16bf36ec/sse"
+    }
+  }
 }
