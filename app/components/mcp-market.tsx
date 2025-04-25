@@ -11,11 +11,12 @@ import GithubIcon from "../icons/github.svg";
 import { List, ListItem, Modal, showToast } from "./ui-lib";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import mcpConfigDefault from "../mcp/mcp_config.default.json";
 import {
   addMcpServer,
   getClientsStatus,
   getClientTools,
-  getMcpConfigFromFile,
+  // getMcpConfigFromFile, // No longer needed for static config
   isMcpEnabled,
   pauseMcpServer,
   restartAllClients,
@@ -88,18 +89,28 @@ export function McpMarketPage() {
     return () => clearInterval(timer);
   }, [mcpEnabled, config]);
 
-  // 加载预设服务器
+  // 加载预设服务器（已修改为仅使用静态配置文件）
   useEffect(() => {
     const loadPresetServers = async () => {
       if (!mcpEnabled) return;
       try {
         setLoadingPresets(true);
-        const response = await fetch("https://nextchat.club/mcp/list");
-        if (!response.ok) {
-          throw new Error("Failed to load preset servers");
+        // 从静态配置文件加载服务器列表
+        if (mcpConfigDefault?.mcpServers) {
+          const staticServers = Object.entries(mcpConfigDefault.mcpServers).map(
+            ([id, serverConfig]) => ({
+              id,
+              name: id,
+              description: serverConfig.description || "",
+              tags: serverConfig.tags || [],
+              configurable: false,
+              ...serverConfig,
+            })
+          );
+          setPresetServers(staticServers);
+        } else {
+          setPresetServers([]);
         }
-        const data = await response.json();
-        setPresetServers(data?.data ?? []);
       } catch (error) {
         console.error("Failed to load preset servers:", error);
         showToast("Failed to load preset servers");
