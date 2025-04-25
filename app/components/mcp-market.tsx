@@ -102,9 +102,14 @@ export function McpMarketPage() {
               id,
               name: id,
               description: (serverConfig as any).description || "",
+              repo: (serverConfig as any).repo || "",
               tags: (serverConfig as any).tags || [],
+              command: (serverConfig as any).command || "",
+              baseArgs: (serverConfig as any).baseArgs || [],
               configurable: false,
-              ...serverConfig,
+              configSchema: (serverConfig as any).configSchema,
+              argsMapping: (serverConfig as any).argsMapping,
+              url: (serverConfig as any).url, // preserve url for downstream use
             })
           );
           setPresetServers(staticServers);
